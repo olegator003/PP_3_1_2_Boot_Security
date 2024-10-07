@@ -1,14 +1,17 @@
 package ru.kata.spring.boot_security.demo.controller;
 
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import ru.kata.spring.boot_security.demo.model.Role;
 import ru.kata.spring.boot_security.demo.model.User;
 import ru.kata.spring.boot_security.demo.services.RoleService;
+import ru.kata.spring.boot_security.demo.services.UserDetailsServiceImpl;
 import ru.kata.spring.boot_security.demo.services.UserService;
 
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -18,16 +21,19 @@ import java.util.Set;
 public class UserController {
     private final UserService userService;
     private final RoleService roleService;
+    private final UserDetailsService userDetailsService;
 
-    public UserController(UserService userService, RoleService roleService) {
+    public UserController(UserService userService, RoleService roleService, UserDetailsService userDetailsService) {
         this.userService = userService;
         this.roleService = roleService;
+        this.userDetailsService = userDetailsService;
     }
     @GetMapping(value = "/user")
-    public String getHome(@AuthenticationPrincipal User activeUser, Model model) {
-        model.addAttribute("role", activeUser.getRoleSet());
+    public String getHome(Principal principal, Model model) {
+        model.addAttribute("user", userDetailsService.loadUserByUsername(principal.getName()));
         return "home_page";
     }
+
     @GetMapping(value = "/user/{id}")
     public String getUserById(@PathVariable("id") int id, Model model) {
         User user = userService.getById(id);
