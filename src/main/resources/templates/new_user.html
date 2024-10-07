@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>New user</title>
+</head>
+<body>
+<div th:align="right">
+    Your login is: <b th:inline="text"> [[${#httpServletRequest.remoteUser}]] </b>
+    <form th:action="@{/logout}" method="POST">
+        <input type="submit" value="Logout"/>
+    </form>
+</div>
+<form th:method="POST" th:action="@{/create}" th:object="${user}">
+    <label for="name">Enter name :</label>
+    <input type="text" th:field="*{name}" id="name"/>
+    <br/>
+    <br/>
+    <label for="last_name">Enter last_name :</label>
+    <input type="text" th:field="*{lastName}" id="last_name"/>
+    <br/>
+    <br/>
+    <label for="age">Enter age :</label>
+    <input type="number" th:field="*{age}" id="age"/>
+    <br/>
+    <br/>
+    <label for="email">Enter email :</label>
+    <input type="text" th:field="*{email}" id="email"/>
+    <br/>
+    <br/>
+    <label for="user_name">Enter username :</label>
+    <input type="text" th:field="*{userName}" id="user_name"/>
+    <br/>
+    <br/>
+    <label for="password">Enter password :</label>
+    <input type="text" th:field="*{password}" id="password"/>
+    <br/>
+    <br/>
+    <label>
+        <select multiple size="2" name="listRoleId" required class="form-control form-control-sm">
+            <option value="1">ROLE_ADMIN</option>
+            <option selected="selected" value="2">ROLE_USER</option>
+        </select>
+    </label>
+    <br/>
+    <br/>
+    <input type="submit" value="Create!"/>
+</form>
+</body>
+</html>
